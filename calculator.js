@@ -1,19 +1,26 @@
-function promptUser() {
+// Function to run the calculator
+function runCalculator() {
     let results = [];
-    while (true) {
-        let x = prompt("Enter the first number:");
-        if (x === null) break;
-        let y = prompt("Enter the second number:");
-        if (y === null) break;
-        let operator = prompt("Enter an operator (+, -, *, /, %):");
-        if (operator === null) break;
+    let continueLoop = true;
 
+    while (continueLoop) {
+        // Get user input
+        let x = prompt("Enter the first number (x):");
+        if (x === null) break; // Exit if the user clicks Cancel
+        let y = prompt("Enter the second number (y):");
+        if (y === null) break; // Exit if the user clicks Cancel
+        let operator = prompt("Enter an arithmetic operator (+, -, *, /, %):");
+        if (operator === null) break; // Exit if the user clicks Cancel
+
+        // Convert x and y to numbers
         x = parseFloat(x);
         y = parseFloat(y);
+
         let result;
 
+        // Check if x and y are numbers and operator is valid
         if (isNaN(x) || isNaN(y)) {
-            result = "Invalid number";
+            result = "wrong input number";
         } else {
             switch (operator) {
                 case '+':
@@ -26,44 +33,46 @@ function promptUser() {
                     result = x * y;
                     break;
                 case '/':
-                    result = y !== 0 ? x / y : "Division by zero";
+                    result = y !== 0 ? x / y : "division by zero";
                     break;
                 case '%':
                     result = x % y;
                     break;
                 default:
-                    result = "Invalid operator";
+                    result = "computation error";
+                    break;
             }
         }
 
-        results.push({ x, operator, y, result });
+        // Store the result in an array if valid
+        if (typeof result === 'number') {
+            results.push(result);
+        }
+
+        // Display the result in a table
+        document.write("<table>");
+        document.write("<tr><th>x</th><th>Operator</th><th>y</th><th>Result</th></tr>");
+        document.write("<tr><td>" + x + "</td><td>" + operator + "</td><td>" + y + "</td><td>" + result + "</td></tr>");
+        document.write("</table>");
+
+        // Ask the user if they want to continue
+        continueLoop = confirm("Do you want to perform another calculation?");
     }
-    return results;
-}
-function displayResults(results) {
-    document.write("<table border='1'>");
-    document.write("<tr><th>Number 1</th><th>Operator</th><th>Number 2</th><th>Result</th></tr>");
-    results.forEach(entry => {
-        document.write(`<tr><td>${entry.x}</td><td>${entry.operator}</td><td>${entry.y}</td><td>${entry.result}</td></tr>`);
-    });
-    document.write("</table>");
-}
 
-function displaySummary(results) {
-    let validResults = results.filter(entry => typeof entry.result === 'number');
-    if (validResults.length === 0) return;
+    // Display summary statistics if there are valid results
+    if (results.length > 0) {
+        let min = Math.min(...results);
+        let max = Math.max(...results);
+        let total = results.reduce((acc, curr) => acc + curr, 0);
+        let avg = total / results.length;
 
-    let min = Math.min(...validResults.map(entry => entry.result));
-    let max = Math.max(...validResults.map(entry => entry.result));
-    let total = validResults.reduce((sum, entry) => sum + entry.result, 0);
-    let avg = total / validResults.length;
-
-    document.write("<table border='1'>");
-    document.write("<tr><th>Minimum</th><th>Maximum</th><th>Average</th><th>Total</th></tr>");
-    document.write(`<tr><td>${min}</td><td>${max}</td><td>${avg}</td><td>${total}</td></tr>`);
-    document.write("</table>");
+        // Display summary table
+        document.write("<table>");
+        document.write("<tr><th>Min</th><th>Max</th><th>Average</th><th>Total</th></tr>");
+        document.write("<tr><td>" + min + "</td><td>" + max + "</td><td>" + avg.toFixed(2) + "</td><td>" + total + "</td></tr>");
+        document.write("</table>");
+    }
 }
 
-let results = promptUser();
-displayResults(results);
-displaySummary(results);
+// Run the calculator
+runCalculator();
