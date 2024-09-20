@@ -1,78 +1,62 @@
-// Function to run the calculator
+//Calculations
+//Bryan Carbajal Albarran
+let operationResults = [];
 function runCalculator() {
-    let results = [];
-    let continueLoop = true;
-
-    while (continueLoop) {
-        // Get user input
-        let x = prompt("Enter the first number (x):");
-        if (x === null) break; // Exit if the user clicks Cancel
-        let y = prompt("Enter the second number (y):");
-        if (y === null) break; // Exit if the user clicks Cancel
-        let operator = prompt("Enter an arithmetic operator (+, -, *, /, %):");
-        if (operator === null) break; // Exit if the user clicks Cancel
-
-        // Convert x and y to numbers
-        x = parseFloat(x);
-        y = parseFloat(y);
-
-        let result;
-
-        // Check if x and y are numbers and operator is valid
-        if (isNaN(x) || isNaN(y)) {
-            result = "wrong input number";
+    let operationResults = true;
+    while (operationResults) {
+        let firstNum = prompt("Please enter your first number:");
+        let operation = prompt("Now enter any of the following operators (+, -, *, /, %):");
+        let secondNum = prompt("Enter your second number:");
+        if (firstNum === null || secondNum === null || operation === null) {
+            break;
+        }
+        firstNum = parseFloat(firstNum);
+        secondNum = parseFloat(secondNum);
+        let calcResult;
+        if (isNaN(firstNum) || isNaN(secondNum)) {
+            calcResult = "Invalid input";
         } else {
-            switch (operator) {
-                case '+':
-                    result = x + y;
+            switch (operation) {
+                case "+":
+                    calcResult = firstNum + secondNum;
                     break;
-                case '-':
-                    result = x - y;
+                case "-":
+                    calcResult = firstNum - secondNum;
                     break;
-                case '*':
-                    result = x * y;
+                case "*":
+                    calcResult = firstNum * secondNum;
                     break;
-                case '/':
-                    result = y !== 0 ? x / y : "division by zero";
+                case "/":
+                    calcResult = secondNum !== 0 ? firstNum / secondNum : "Division by 0";
                     break;
-                case '%':
-                    result = x % y;
+                case "%":
+                    calcResult = firstNum % secondNum;
                     break;
                 default:
-                    result = "computation error";
-                    break;
+                    calcResult = "Unknown operator";
             }
         }
-
-        // Store the result in an array if valid
-        if (typeof result === 'number') {
-            results.push(result);
+        if (!isNaN(calcResult) && typeof calcResult === "number") {
+            operationResults.push(calcResult);
         }
-
-        // Display the result in a table
         document.write("<table>");
-        document.write("<tr><th>x</th><th>Operator</th><th>y</th><th>Result</th></tr>");
-        document.write("<tr><td>" + x + "</td><td>" + operator + "</td><td>" + y + "</td><td>" + result + "</td></tr>");
+        document.write("<tr><th>Number 1</th><th>Operator</th><th>Number 2</th><th>Result</th></tr>");
+        document.write(`<tr><td>${firstNum}</td><td>${operation}</td><td>${secondNum}</td><td>${calcResult}</td></tr>`);
         document.write("</table>");
-
-        // Ask the user if they want to continue
-        continueLoop = confirm("Do you want to perform another calculation?");
+        continueCalculation = confirm("For another Calculation click 'OK'" + "\n" + "For Results click 'Cancel'");
     }
-
-    // Display summary statistics if there are valid results
-    if (results.length > 0) {
-        let min = Math.min(...results);
-        let max = Math.max(...results);
-        let total = results.reduce((acc, curr) => acc + curr, 0);
-        let avg = total / results.length;
-
-        // Display summary table
-        document.write("<table>");
-        document.write("<tr><th>Min</th><th>Max</th><th>Average</th><th>Total</th></tr>");
-        document.write("<tr><td>" + min + "</td><td>" + max + "</td><td>" + avg.toFixed(2) + "</td><td>" + total + "</td></tr>");
-        document.write("</table>");
+    if (operationResults.length > 0) {
+        displayResults();
     }
 }
-
-// Run the calculator
+function displayResults() {
+    let minResult = Math.min(...operationResults);
+    let maxResult = Math.max(...operationResults);
+    let totalResult = operationResults.reduce((sum, value) => sum + value, 0);
+    let averageResult = totalResult / operationResults.length;
+    document.write("<table>");
+    document.write("<tr><th>Minimum</th><th>Maximum</th><th>Average</th><th>Total</th></tr>");
+    document.write(`<tr><td>${minResult}</td><td>${maxResult}</td><td>${averageResult.toFixed(2)}</td><td>${totalResult}</td></tr>`);
+    document.write("</table>");
+}
 runCalculator();
